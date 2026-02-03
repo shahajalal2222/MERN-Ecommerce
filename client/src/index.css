@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@layer components{
+    .hoverEffect {
+     @apply duration-300 ease-in-out;
+    }
+}
