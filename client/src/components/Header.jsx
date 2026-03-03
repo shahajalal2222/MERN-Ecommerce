@@ -12,10 +12,14 @@ import { useState } from 'react';
 import Title from "./Title";
 import { IoCloseOutline } from "react-icons/io5";
 import SocialLinks from "./SocialLinks";
+import { useSelector } from 'react-redux';
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
+    const { products } = useSelector((state) => state.orebi);
+  const token = localStorage.getItem('token');
+
   return (
-    <div className="border-b border-slate-300 sticky top-0 z-50">
+    <div className="border-b border-slate-300  top-0 z-50">
       <Container className="py-7 flex items-center gap-x-3 md:gap-x-7 justify-between">
         <Link to={'/'}>
           <img src={logo} alt="logo" className="w-20" />
@@ -38,11 +42,20 @@ const Header = () => {
             <IoMdCard />
             <span className="absolute -right-2 -top-1 w-3.5 h-3.5
             rounded-full text-[9px] bg-gray-400 group-hover:bg-black text-white flex 
-            items-center justify-center hoverEffect">0</span>
+            items-center justify-center hoverEffect">
+              {products?.length>0 ? products?.length:0}
+            </span>
           </Link>
-          <Link to={'/signin'} className="text-xl hover:primary hoverEffect">
+           
+           {token ?(<Link to="/profile" 
+          className="hover:text-black/80 hoverEffect 
+              cursor-pointer relative group overflow-hidden">
+           Profile</Link>):
+           (<Link to={'/signin'} 
+           className="text-xl hover:text-primary hoverEffect">
             <FaUserAlt />
-          </Link>
+          </Link>)}
+
         </div>
         <button onClick={() => setIsOpen(true)} className="text-2xl text-lightText hover:text-primary md:hidden 
             hoverEffect">

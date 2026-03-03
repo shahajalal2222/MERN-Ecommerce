@@ -1,6 +1,7 @@
 import Banner from "./components/Banner"
 import Container from "./components/Container"
 import Header from "./components/Header"
+import NewArrival from "./components/NewArrival"
 import Sale from "./components/Sale"
 import Title from "./components/Title"
 
@@ -10,7 +11,7 @@ function App() {
       <Banner />
       <Container className="py-5 md:py-10">
         <Sale />
-        {/* New Arival    */}
+        <NewArrival/>
         { /* Best Sellers  */}
         {/* Product of the Year  */}
         {/* Special Offers */}
