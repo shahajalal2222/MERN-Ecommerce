@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../Header";
 import { Outlet, ScrollRestoration } from "react-router-dom";
-import Footer from "../footer";
+import Footer from "../Footer";
 import ServicesTag from "../ServicesTag";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";

@@ -1,7 +1,7 @@
 import React from 'react';
 import { logo } from "../assets/images/index";
 import Container from './Container';
-import SearchInput from './searchInput';
+import SearchInput from './SearchInput';
 import { HiOutlineMenu } from "react-icons/hi";
 import { FaUserAlt } from "react-icons/fa";
 import { IoMdCard, IoMdCloseCircleOutline } from "react-icons/io";
