@@ -1,3 +1,4 @@
+
 import express from "express";
 import 'dotenv/config';
 import cors from "cors";
@@ -11,14 +12,15 @@ import productRoute from "./routes/productRoute.js";
 
 const app = express();
 
-// --- Body parsers ---
+// Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- CORS ---
+// CORS
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://your-production-frontend.onrender.com"
+  "https://mern-ecommerce-3-yypv.onrender.com",
+  "https://mern-ecommerce-5-vx2f.onrender.com"
 ];
 
 app.use(cors({
@@ -31,26 +33,25 @@ app.use(cors({
   allowedHeaders: ["Content-Type","Authorization","token"]
 }));
 
-// --- Connect DB & Cloudinary ---
+// Connect DB & Cloudinary
 dbConnect();
 connectCloudinary();
 
-// --- API Routes ---
+// --- API ROUTES ---
 app.use('/api/user', userRouter);
 app.use('/api/product', productRoute);
 
-// --- Serve React SPA ---
+// --- Serve SPA ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const adminDistPath = path.join(__dirname, '../admin/dist');
 
-app.use(express.static(adminDistPath));
+app.use(express.static(path.join(__dirname, '../admin/dist')));
 
-// SPA fallback for non-API routes
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(adminDistPath, 'index.html'));
+// Correct SPA catch-all
+app.get((req, res) => {
+  res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
 });
 
-// --- Start server ---
+// Start server
 const port = process.env.PORT || 4040;
 app.listen(port, () => console.log(`Server running on port: ${port}`));
