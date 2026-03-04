@@ -18,8 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // --- CORS ---
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://mern-ecommerce-3-yypv.onrender.com",
-  "https://mern-ecommerce-5-vx2f.onrender.com"
+  "https://your-production-frontend.onrender.com"
 ];
 
 app.use(cors({
@@ -40,14 +39,14 @@ connectCloudinary();
 app.use('/api/user', userRouter);
 app.use('/api/product', productRoute);
 
-// --- Serve SPA ---
+// --- Serve React SPA ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const adminDistPath = path.join(__dirname, '../admin/dist');
+
 app.use(express.static(adminDistPath));
 
-// --- SPA fallback for non-API routes ---
+// SPA fallback for non-API routes
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(adminDistPath, 'index.html'));
 });
