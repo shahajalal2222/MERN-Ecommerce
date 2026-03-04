@@ -1,6 +1,5 @@
-
 import express from "express";
-import 'dotenv/config';
+import "dotenv/config";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -12,46 +11,77 @@ import productRoute from "./routes/productRoute.js";
 
 const app = express();
 
-// Body parsers
+// ======================
+// BODY PARSERS
+// ======================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS
+// ======================
+// CORS CONFIG
+// ======================
 const allowedOrigins = [
   "http://localhost:5173",
   "https://mern-ecommerce-3-yypv.onrender.com",
-  "https://mern-ecommerce-5-vx2f.onrender.com"
+  "https://mern-ecommerce-5-vx2f.onrender.com",
 ];
 
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) callback(null, true);
-    else callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization","token"]
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "token"],
+  })
+);
 
-// Connect DB & Cloudinary
+// ======================
+// CONNECT DATABASE
+// ======================
 dbConnect();
 connectCloudinary();
 
-// --- API ROUTES ---
-app.use('/api/user', userRouter);
-app.use('/api/product', productRoute);
+// ======================
+// API ROUTES
+// ======================
+app.use("/api/user", userRouter);
+app.use("/api/product", productRoute);
 
-// --- Serve SPA ---
+// ======================
+// SERVE FRONTEND (VITE BUILD)
+// ======================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, '../admin/dist')));
+// ⚠️ IMPORTANT:
+// If your frontend folder is "client" → use client
+// If it's "admin" → change to ../admin/dist
+const frontendPath = path.join(__dirname, "../client/dist");
 
-// Correct SPA catch-all
-app.get((req, res) => {
-  res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
+app.use(express.static(frontendPath));
+
+// ======================
+// SPA FALLBACK (NO CRASH VERSION)
+// ======================
+app.use((req, res, next) => {
+  if (req.method === "GET" && !req.path.startsWith("/api")) {
+    res.sendFile(path.join(frontendPath, "index.html"));
+  } else {
+    next();
+  }
 });
 
-// Start server
+// ======================
+// START SERVER
+// ======================
 const port = process.env.PORT || 4040;
-app.listen(port, () => console.log(`Server running on port: ${port}`));
+
+app.listen(port, () => {
+  console.log(`Server running on port: ${port}`);
+});
