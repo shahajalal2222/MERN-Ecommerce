@@ -30,7 +30,7 @@ app.use(cors({
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization", "token"] // important
 }));
 
 // Connect DB + Cloudinary
@@ -41,9 +41,9 @@ connectCloudinary();
 app.use('/api/user', userRouter);
 app.use('/api/product', productRoute);
 
-// Test
+// Test route
 app.get('/', (req, res) => res.send("hello from orebi server"));
 
 // Start server
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 4040;
 app.listen(port, () => console.log(`Server running on port: ${port}`));
