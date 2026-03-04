@@ -11,11 +11,11 @@ import productRoute from "./routes/productRoute.js";
 
 const app = express();
 
-// Body parsers
+// --- Body parsers ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS
+// --- CORS ---
 const allowedOrigins = [
   "http://localhost:5173",
   "https://mern-ecommerce-3-yypv.onrender.com",
@@ -32,11 +32,11 @@ app.use(cors({
   allowedHeaders: ["Content-Type","Authorization","token"]
 }));
 
-// Connect DB & Cloudinary
+// --- Connect DB & Cloudinary ---
 dbConnect();
 connectCloudinary();
 
-// --- API ROUTES ---
+// --- API Routes ---
 app.use('/api/user', userRouter);
 app.use('/api/product', productRoute);
 
@@ -44,13 +44,14 @@ app.use('/api/product', productRoute);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, '../admin/dist')));
+const adminDistPath = path.join(__dirname, '../admin/dist');
+app.use(express.static(adminDistPath));
 
-// Correct SPA catch-all
-app.get((req, res) => {
-  res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
+// --- SPA fallback for non-API routes ---
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(adminDistPath, 'index.html'));
 });
 
-// Start server
+// --- Start server ---
 const port = process.env.PORT || 4040;
 app.listen(port, () => console.log(`Server running on port: ${port}`));
