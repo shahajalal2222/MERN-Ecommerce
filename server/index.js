@@ -8,7 +8,15 @@ import { connect } from "mongoose";
 import connectCloudinary from "./config/cloudinary.js";
 const app=express();
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+
+app.use(cors({
+  origin: [
+    "http://localhost:5173",     // local frontend (Vite)
+    "https://mern-ecommerce-3-yypv.onrender.com/" // deployed frontend
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
 dbConnect()
 connectCloudinary();
