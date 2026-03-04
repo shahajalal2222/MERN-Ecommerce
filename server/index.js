@@ -42,7 +42,7 @@ app.use(
 );
 
 // ======================
-// CONNECT DATABASE
+// CONNECT DATABASE & CLOUDINARY
 // ======================
 dbConnect();
 connectCloudinary();
@@ -59,17 +59,16 @@ app.use("/api/product", productRoute);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ⚠️ IMPORTANT:
-// If your frontend folder is "client" → use client
-// If it's "admin" → change to ../admin/dist
+// ⚠️ IMPORTANT: update if your frontend folder is "admin" instead of "client"
 const frontendPath = path.join(__dirname, "../client/dist");
 
 app.use(express.static(frontendPath));
 
 // ======================
-// SPA FALLBACK (NO CRASH VERSION)
+// SPA FALLBACK (FOR REFRESH)
 // ======================
 app.use((req, res, next) => {
+  // Only GET requests and non-API routes should fallback to index.html
   if (req.method === "GET" && !req.path.startsWith("/api")) {
     res.sendFile(path.join(frontendPath, "index.html"));
   } else {
@@ -80,8 +79,8 @@ app.use((req, res, next) => {
 // ======================
 // START SERVER
 // ======================
-const port = process.env.PORT || 4040;
+const PORT = process.env.PORT || 4040;
 
-app.listen(port, () => {
-  console.log(`Server running on port: ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port: ${PORT}`);
 });
